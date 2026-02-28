@@ -1,0 +1,25 @@
+1. Run Python Script
+
+cd ~/Documents/Arducam/ArduCam_EVK_Demo/python
+python project/sync.py -c ~/Documents/Arducam/Config/4000x3000_12fps_clear2.cfg
+
+Convert Raw to video:
+ffmpeg \
+-f rawvideo \
+-pix_fmt bayer_gbrg8\
+-video_size 4000x3000 \
+-framerate 10 \
+-i recording_2026-02-28_12-06-08.raw \
+output_2.mp4
+
+
+Faster Conversion:
+ffmpeg \
+-f rawvideo \
+-pix_fmt bayer_gbrg8 \
+-video_size 4000x3000 \
+-framerate 10 \
+-i recording.raw \
+-preset ultrafast \
+-crf 28 \
+output.mp4

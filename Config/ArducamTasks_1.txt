@@ -1,0 +1,121 @@
+Files and their purposes:
+
+"4000x3000_12fps_clear2.cfg" - Config file that has a clear view without the green background
+	- Located within Config
+
+*If you can, store the other files in a separate folder to not mix up the working one*
+
+"sync.py" - Original Python script that runs config file; Only lets you view the camera and nothing else
+	- Located within ArduCam_EVK_Demo/python/project
+
+"sync.test.py" - Current Python script being tested to record and save a file; Can currently record and save as an mp4 within "python" folder but isn't smooth yet
+	Press Q to stop camera
+	Press R to record
+	Press S to stop recording
+		*Can be changed within the Python file
+
+-------------------------------------------------------------
+Camera Parameters:
+
+*Use this link to help guide in determining the process of changing parameters: https://docs.arducam.com/USB-Industrial-Camera/Application-note/108MP-USB3-Kit/#update-configuration-file*
+
+This includes:
+ 1. Determining your desired parameter values using the Windows app "Arducam USB Camera Shield Setup Tool"
+ 2. Change the DEF value to your desired value within the respective block in the config files
+ 3. Determine the respective register values to be put into the very end of the script where the rest of the REG changes are made (4th last block from the bottom)
+
+---> From what I've found, the app actually allows you to determine the register values once you've set the parameters within the app, but for some reason the camera we have doesn't allow us to use the app to do it for us, hence we had to use Chat to somehow dig up those values, which makes it difficult if we want to change it on our own. I'll keep looking into how we can do this ourselves.
+
+---> We might have to send an email to "sales@arducam.com" for the new version of the config file, which allows manual exposure and white balance
+
+------------------------------------------------------------
+Register Values for each parameter from Chat:    (Format: REG = 0x0202, XXXX)
+
+For Sensor_Exp(us) (0x0202):
+
+ Exposure Register (0x0202)   | Decimal | Relative Brightness    | Typical Use     |
+ ---------------------------- | ------- | ---------------------- | --------------- |
+ `0x0600`                     | 1536    | ~100% (your reference) | Dim indoor      |
+ `0x0500`                     | 1280    | ~83%                   | Slightly darker |
+ `0x0400`                     | 1024    | ~67%                   | Medium dark     |
+ `0x0300`                     | 768     | ~50%                   | Dark            |
+ `0x0200`                     | 512     | ~33%                   | Very dark       |
+ "0x0100`                     | 256     | ~17%                   | Extremely dark  |
+
+| Brightness % | Exposure (us) | Register |
+| ------------ | ------------- | -------- |
+| 10%          | 8000          | `0x0100` |
+| 20%          | 16000         | `0x0200` |
+| 30%          | 24000         | `0x0300` |
+| 40%          | 32000         | `0x0400` |
+| 50%          | 42000         | `0x0500` |
+| 60%          | 50000         | `0x0600` |
+| 70%          | 60000         | `0x0800` |
+| 80%          | 70000         | `0x1000` |
+| 100%         | 83734         | `0x147B` |
+
+For Sensor_Analog_Gain_0.01x (0x0204):
+
+| Gain | DEF value | Register |
+| ---- | --------- | -------- |
+| 1.0× | 100       | `0x0100` |
+| 1.5× | 150       | `0x0180` |
+| 2.0× | 200       | `0x0200` |
+| 2.5× | 250       | `0x0280` |
+| 3.0× | 300       | `0x0300` |
+| 3.3× | 331       | `0x0350` |
+| 4.0× | 400       | `0x0400` |
+
+
+For Sensor_Digital_Gain(R)_0.01x (0x0210):
+
+| Gain | DEF | Register |
+| ---- | --- | -------- |
+| 1.0× | 100 | `0x0100` |
+| 1.2× | 120 | `0x0120` |
+| 1.4× | 140 | `0x0140` |
+| 1.6× | 160 | `0x0160` |
+| 1.8× | 180 | `0x0180` |
+| 2.0× | 200 | `0x0200` |
+
+
+For Sensor_Digital_Gain(B)_0.01x (0x0212):
+
+| Gain | DEF | Register |
+| ---- | --- | -------- |
+| 1.0× | 100 | `0x0100` |
+| 1.2× | 120 | `0x0120` |
+| 1.4× | 140 | `0x0140` |
+| 1.6× | 160 | `0x0160` |
+| 1.8× | 180 | `0x0180` |
+| 2.0× | 200 | `0x0200` |
+
+
+For Sensor_Framerate (0x0340):
+
+| FPS    | Register     |
+| ------ | ------------ |
+| 7 fps  | `0x1400`     |
+| 10 fps | `0x1000`     |
+| 12 fps | `0x0C84`     |
+| 15 fps | `0x0A00`     |
+
+To be continued...
+"https://chatgpt.com/s/t_69a21cf41d508191918b4b09b2efcc36"
+
+
+
+
+
+
+
+	
+
+
+
+
+
+
+
+
+
